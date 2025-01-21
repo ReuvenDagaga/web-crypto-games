@@ -1,5 +1,6 @@
 import { io } from 'socket.io-client';
 import { Room } from '../interfaces/Room'; 
+import { useNavigate } from 'react-router-dom';
 
 const socket = io('http://localhost:3222');
 

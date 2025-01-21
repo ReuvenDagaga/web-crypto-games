@@ -2,6 +2,7 @@ import { Dispatch, useEffect } from 'react';
 import socket, { joinRoom } from '../../services/socketService';
 import { Box, Button, Typography, List, ListItem, ListItemText } from '@mui/material';
 import { Room } from '../../interfaces/Room';
+import { useNavigate } from 'react-router-dom';
 
 interface RoomsProps {
     rooms: Room[]
@@ -9,7 +10,7 @@ interface RoomsProps {
 }
 
 const Rooms = ({ rooms, setRooms} : RoomsProps) => {
-
+    const navigate = useNavigate()
     useEffect(() => {
         socket.on('roomsUpdate', (updatedRooms) => {
             setRooms(updatedRooms);
@@ -19,6 +20,10 @@ const Rooms = ({ rooms, setRooms} : RoomsProps) => {
             socket.off('roomsUpdate');
         };
     }, []);
+
+    function handleJoinRoom(roomId: string) {
+        navigate('/2048')
+    }
 
 
     return (
@@ -37,7 +42,7 @@ const Rooms = ({ rooms, setRooms} : RoomsProps) => {
                             <Button 
                                 variant="contained" 
                                 color="secondary" 
-                                onClick={() => joinRoom(room.id)}
+                                onClick={() => handleJoinRoom(room.id)}
                             >
                                 Join
                             </Button>
