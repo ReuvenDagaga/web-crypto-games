@@ -1,5 +1,6 @@
-// src/models/Room.ts
-export interface Room {
+import mongoose, { Schema, Document } from 'mongoose';
+
+export interface IRoom extends Document {
     id: string;
     name: string;
     gameType: string;
@@ -9,14 +10,15 @@ export interface Room {
     isFull: boolean;
 }
 
-export const createRoomModel = (name: string, gameType: string, price: number): Room => {
-    return {
-        id: Date.now().toString(),
-        name,
-        gameType,
-        price,
-        players: [],
-        maxPlayers: 2,
-        isFull: false,
-    };
-};
+const RoomSchema: Schema = new Schema({
+    id: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    gameType: { type: String, required: true },
+    price: { type: Number, required: true },
+    players: { type: [String], default: [] },
+    maxPlayers: { type: Number, required: true },
+    isFull: { type: Boolean, default: false },
+});
+
+const Rooms = mongoose.model<IRoom>('Room', RoomSchema);
+export default Rooms 

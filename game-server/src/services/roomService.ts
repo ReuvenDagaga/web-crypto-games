@@ -1,26 +1,31 @@
-// src/services/roomService.ts
-import { Room, createRoomModel } from '../models/roomModel';
+import Rooms, { IRoom } from '../models/roomModel'
 
-const rooms: Room[] = [];
-
-export const getRooms = () => {
-    return rooms.filter(room => !room.isFull);
+export const getRoomsService = async (gameNameFromUrl: string): Promise<IRoom[]> => {
+    const rooms = await Rooms.find({isFull: false, gameType: gameNameFromUrl });
+    return rooms
 };
 
-export const createRoom = (name: string, gameType: string, price: number) => {
-    const newRoom = createRoomModel(name, gameType, price);
-    rooms.push(newRoom);
+export const createRoomService = (name: string, gameType: string, price: number, maxPlayers: number, players: any[], isFull: boolean) => {
+    const newRoom = new Rooms({
+        id: Date.now().toString(),
+        name,
+        gameType,
+        price,
+        maxPlayers,
+        players,
+        isFull
+    });
+    Rooms.create(newRoom);
     return newRoom;
 };
 
-export const joinRoom = (roomId: string, playerId: string) => {
-    const room = rooms.find(r => r.id === roomId);
-    if (!room) throw new Error('Room not found');
-    if (room.isFull) throw new Error('Room is full');
-
-    room.players.push(playerId);
-    if (room.players.length === room.maxPlayers) {
-        room.isFull = true;
+export const joinRoomService = async (roomId: string, playerId: string): Promise<IRoom> => {
+    const currentRoom = await Rooms.findOne({ id: roomId });
+    if (!currentRoom) throw new Error('Room not found');
+    if (currentRoom.isFull) throw new Error('Room is full')
+    currentRoom.players.push(playerId);
+    if (currentRoom.players.length === currentRoom.maxPlayers) {
+        currentRoom.isFull = true;
     }
-    return room;
+    return await currentRoom.save();
 };

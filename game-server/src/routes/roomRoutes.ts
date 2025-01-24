@@ -1,11 +1,10 @@
-// src/routes/roomRoutes.ts
 import express from 'express';
-import { getRoomsHandler, createRoomHandler, joinRoomHandler } from '../controllers/roomController';
+import { getRooms, createRoom, joinRoom } from '../controllers/roomController';
 
 const router = express.Router();
 
-router.get('/rooms', getRoomsHandler);
-router.post('/rooms', createRoomHandler);
-router.post('/rooms/join', joinRoomHandler);
+router.get('/:gameNameFromUrl', getRooms);
+router.post('/', createRoom);
+router.post('/join', joinRoom);
 
 export default router;

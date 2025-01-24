@@ -1,5 +1,5 @@
 import { Dispatch, useEffect } from 'react';
-import socket, { joinRoom } from '../../services/socketService';
+import socket from '../../services/roomService';
 import { Box, Button, Typography, List, ListItem, ListItemText } from '@mui/material';
 import { Room } from '../../interfaces/Room';
 import { useNavigate } from 'react-router-dom';

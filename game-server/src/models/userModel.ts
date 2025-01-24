@@ -4,7 +4,6 @@ import mongoose, { Document, Schema } from 'mongoose';
 export interface IUser extends Document {
     walletAddress: string;
     username?: string;
-    email?: string;
     points: number;
     totalGames: number;
     totalWins: number;
@@ -23,13 +22,6 @@ const UserSchema: Schema = new Schema<IUser>({
     username: {
         type: String,
         trim: true,
-    },
-    email: {
-        type: String,
-        trim: true,
-        lowercase: true,
-        unique: true,
-        sparse: true,  
     },
     points: {
         type: Number,
