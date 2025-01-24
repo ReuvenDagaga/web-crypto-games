@@ -4,7 +4,7 @@ import { Typography, Box, Button } from "@mui/material";
 import Rooms from "../components/rooms/Rooms";
 import CreateRoomModal from "../components/rooms/CreateRoomModal";
 import { Room } from "../interfaces/Room";
-import { getRoomsService } from "../services/roomService";
+import { getRoomsService, createRoomService } from "../services/roomService";
 
 const GamePage = () => {
   const { gameId } = useParams();
@@ -20,27 +20,28 @@ const GamePage = () => {
     fetchRooms();
   }, [gameId]);
 
-  const handleCreateRoom = (
-    gameId: string,
-    roomName: string,
-    entryFee: string
-  ) => {
-    setRooms((prevRooms) => [
-      ...prevRooms,
-      {
-        id: Date.now().toString(),
+
+  const handleCreateRoom = async (gameId: string, roomName: string, entryFee: string) => {
+    try {
+      const newRoom = await createRoomService({
         name: roomName,
         gameType: gameId,
         price: parseInt(entryFee),
-        players: [],
         maxPlayers: 2,
+        players: [],
         isFull: false,
-      },
-    ]);
-    setOpenModal(false);
+      });
+  
+      setRooms((prevRooms) => [...prevRooms, newRoom]);
+      setOpenModal(false);
+    } catch (error) {
+      console.error("Failed to create room:", error);
+    }
   };
+  
 
   return (
+
     <Box sx={{ textAlign: "center", mt: 4 }}>
       <Typography variant="h4">Welcome to {gameId}</Typography>
       <Button
@@ -50,12 +51,14 @@ const GamePage = () => {
       >
         Create New Room
       </Button>
-      <Rooms rooms={rooms} setRooms={setRooms} />
+      {rooms && (
+        <Rooms rooms={rooms} gameId={gameId!} />
+      )}
       <CreateRoomModal
         open={openModal}
         onClose={() => setOpenModal(false)}
         onCreate={handleCreateRoom}
-        gameId={gameId || ""}
+        gameId={gameId!}
       />
     </Box>
   );

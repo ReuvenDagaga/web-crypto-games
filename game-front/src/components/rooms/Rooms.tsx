@@ -1,30 +1,30 @@
-import { Dispatch, useEffect } from 'react';
-import socket from '../../services/roomService';
 import { Box, Button, Typography, List, ListItem, ListItemText } from '@mui/material';
 import { Room } from '../../interfaces/Room';
 import { useNavigate } from 'react-router-dom';
+import { processPayment } from "../../services/walletService";
 
 interface RoomsProps {
     rooms: Room[]
-    setRooms: Dispatch<React.SetStateAction<Room[]>> 
+    gameId: string
 }
 
-const Rooms = ({ rooms, setRooms} : RoomsProps) => {
-    const navigate = useNavigate()
-    useEffect(() => {
-        socket.on('roomsUpdate', (updatedRooms) => {
-            setRooms(updatedRooms);
-        });
+const Rooms = ({ rooms, gameId }: RoomsProps) => {
+    const navigate = useNavigate();
 
-        return () => {
-            socket.off('roomsUpdate');
-        };
-    }, []);
+    const handleJoinRoom = async (roomId: string) => {
+        try {
+            const transactionSignature = await processPayment();
+            if (!transactionSignature) {
+                alert("Transaction failed. Please try again.");
+                return;
+            }
 
-    function handleJoinRoom(roomId: string) {
-        navigate('/2048')
-    }
-
+            console.log("Transaction successful:", transactionSignature);
+            navigate(`/${gameId}/room/${roomId}`);
+        } catch {
+            alert("An error occurred while joining the room.");
+        }
+    };
 
     return (
         <Box textAlign="center" sx={{ mt: 4 }}>
@@ -36,7 +36,7 @@ const Rooms = ({ rooms, setRooms} : RoomsProps) => {
                     rooms.map((room) => (
                         <ListItem key={room.id} sx={{ borderBottom: '1px solid #ccc' }}>
                             <ListItemText
-                                primary={`${room.name} - ${room.price} USDT`}
+                                primary={`${room.name} - 0.01 SOL`}
                                 secondary={`${room.players}/${room.maxPlayers} Players`}
                             />
                             <Button 

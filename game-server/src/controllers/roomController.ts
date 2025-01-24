@@ -4,7 +4,7 @@ import {
   createRoomService,
   joinRoomService,
 } from "../services/roomService";
-import { log } from "console";
+
 
 export const getRooms = async (req: Request, res: Response) => {
   const gameNameFromUrl = req.params.gameNameFromUrl;
