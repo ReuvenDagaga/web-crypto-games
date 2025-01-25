@@ -44,9 +44,9 @@ export const createRoom = (req: Request, res: Response) => {
 
 export const joinRoom = (req: Request, res: Response) => {
   try {
-    const { roomId, playerId } = req.body;
-    if(!roomId || !playerId) throw new Error('Invalid request');
-    const room = joinRoomService(roomId, playerId);
+    const { roomId, signature } = req.body;
+    if(!roomId || !signature) throw new Error('Invalid request');
+    const room = joinRoomService(roomId, signature);
     res.json(room);
   } catch (error: any) {
     res.status(400).json({ error: error.message });

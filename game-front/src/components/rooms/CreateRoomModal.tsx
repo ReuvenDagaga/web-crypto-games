@@ -1,21 +1,30 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { Modal, Box } from "@mui/material";
 import { useState } from "react";
+import { processPayment } from "../../services/walletService";
+import { Signature } from "../../interfaces/Signature";
 
 interface CreateRoomModalProps {
     open: boolean;
     onClose: () => void;
-    onCreate: (gameId: string, roomName: string, entryFee: string) => void;
+    onCreate: (gameId: string, roomName: string, entryFee: string, signature: Signature) => void;
     gameId: string;
 }
 
 const CreateRoomModal = ({ open, onClose, onCreate, gameId }: CreateRoomModalProps) => {
     const [roomName, setRoomName] = useState('');
     const [entryFee, setEntryFee] = useState('');
+    
 
-    const handleCreateRoom = () => {
+
+    const handleCreateRoom = async () => {
         if (roomName && entryFee) {
-            onCreate(gameId, roomName, entryFee);
+            const signature: Signature | null = await processPayment();
+            if (!signature) {
+                alert('Transaction failed. Please try again.');
+                return;
+            }
+            onCreate(gameId, roomName, entryFee, signature);
             setRoomName('');
             setEntryFee('');
             onClose();

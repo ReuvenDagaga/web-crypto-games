@@ -19,11 +19,11 @@ export const createRoomService = (name: string, gameType: string, price: number,
     return newRoom;
 };
 
-export const joinRoomService = async (roomId: string, playerId: string): Promise<IRoom> => {
+export const joinRoomService = async (roomId: string): Promise<IRoom> => {
     const currentRoom = await Rooms.findOne({ id: roomId });
     if (!currentRoom) throw new Error('Room not found');
     if (currentRoom.isFull) throw new Error('Room is full')
-    currentRoom.players.push(playerId);
+    currentRoom.players.push();
     if (currentRoom.players.length === currentRoom.maxPlayers) {
         currentRoom.isFull = true;
     }

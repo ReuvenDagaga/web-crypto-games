@@ -5,6 +5,9 @@ import Rooms from "../components/rooms/Rooms";
 import CreateRoomModal from "../components/rooms/CreateRoomModal";
 import { Room } from "../interfaces/Room";
 import { getRoomsService, createRoomService } from "../services/roomService";
+import { Signature } from "../interfaces/Signature";
+
+
 
 const GamePage = () => {
   const { gameId } = useParams();
@@ -21,14 +24,14 @@ const GamePage = () => {
   }, [gameId]);
 
 
-  const handleCreateRoom = async (gameId: string, roomName: string, entryFee: string) => {
+  const handleCreateRoom = async (gameId: string, roomName: string, entryFee: string, signature: Signature) => {
     try {
       const newRoom = await createRoomService({
         name: roomName,
         gameType: gameId,
         price: parseInt(entryFee),
         maxPlayers: 2,
-        players: [],
+        players:  [signature.publicKeyAsString],
         isFull: false,
       });
   

@@ -1,24 +1,31 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
+
+interface ISignature {
+    publicKey: string;
+    transactionSignature: string;
+}
 
 export interface IRoom extends Document {
-    id: string;
     name: string;
     gameType: string;
     price: number;
-    players: string[];
+    players: ISignature[];
     maxPlayers: number;
     isFull: boolean;
 }
 
-const RoomSchema: Schema = new Schema({
-    id: { type: String, required: true, unique: true },
+const SignatureSchema: Schema = new Schema({
+    publicKey: { type: String, required: true },
+    transactionSignature: { type: String, required: true }
+});
+
+const RoomSchema: Schema = new Schema<IRoom>({
     name: { type: String, required: true },
     gameType: { type: String, required: true },
     price: { type: Number, required: true },
-    players: { type: [String], default: [] },
-    maxPlayers: { type: Number, required: true },
-    isFull: { type: Boolean, default: false },
-});
+    players: { type: [SignatureSchema], default: [] },
+    maxPlayers: { type: Number, default: 2 },
+    isFull: { type: Boolean, default: false }
+}, { timestamps: true });
 
-const Rooms = mongoose.model<IRoom>('Room', RoomSchema);
-export default Rooms 
+export default mongoose.model<IRoom>("Room", RoomSchema);

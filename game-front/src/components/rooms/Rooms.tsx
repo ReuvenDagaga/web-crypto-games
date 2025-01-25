@@ -13,14 +13,12 @@ const Rooms = ({ rooms, gameId }: RoomsProps) => {
 
     const handleJoinRoom = async (roomId: string) => {
         try {
-            const transactionSignature = await processPayment();
-            if (!transactionSignature) {
+            const signature: any = await processPayment();
+            if (!signature) {
                 alert("Transaction failed. Please try again.");
                 return;
             }
-
-            console.log("Transaction successful:", transactionSignature);
-            navigate(`/${gameId}/room/${roomId}`);
+                        
         } catch {
             alert("An error occurred while joining the room.");
         }

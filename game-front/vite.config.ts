@@ -7,23 +7,23 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 export default defineConfig({
   plugins: [react()],
   define: {
-    global: {}, // מוסיף את אובייקט global עבור תאימות Node.js
+    global: {},
   },
   resolve: {
     alias: {
-      buffer: 'buffer/', // מגדיר את buffer כמודול מותאם לדפדפן
+      buffer: 'buffer/', 
     },
   },
   optimizeDeps: {
-    include: ['buffer'], // מוודא ש-buffer כלול בתלויות
+    include: ['buffer'], 
   },
   build: {
     rollupOptions: {
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          buffer: true, // מפעיל פוליפיל עבור buffer
+          buffer: true, 
         }),
-        NodeModulesPolyfillPlugin() // מוסיף תמיכה כללית למודולים של Node.js
+        NodeModulesPolyfillPlugin() 
       ],
     },
   },
