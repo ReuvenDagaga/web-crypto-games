@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface ISignature {
+export interface ISignature {
     publicKey: string;
     transactionSignature: string;
 }
@@ -12,6 +12,7 @@ export interface IRoom extends Document {
     players: ISignature[];
     maxPlayers: number;
     isFull: boolean;
+    isActive: boolean;
 }
 
 const SignatureSchema: Schema = new Schema({
@@ -25,7 +26,8 @@ const RoomSchema: Schema = new Schema<IRoom>({
     price: { type: Number, required: true },
     players: { type: [SignatureSchema], default: [] },
     maxPlayers: { type: Number, default: 2 },
-    isFull: { type: Boolean, default: false }
+    isFull: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 
 export default mongoose.model<IRoom>("Room", RoomSchema);

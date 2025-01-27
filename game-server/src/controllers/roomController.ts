@@ -24,9 +24,7 @@ export const createRoom = (req: Request, res: Response) => {
     maxPlayers,
     players,
     isFull = false,
-  } = req.body;
-  console.log(req.body);
-  
+  } = req.body;  
   if (name && gameType && price && maxPlayers && players && isFull === false) {
     const room = createRoomService(
       name,

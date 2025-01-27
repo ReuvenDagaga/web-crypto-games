@@ -14,7 +14,14 @@ export const getRoomsService = async (gameNameFromUrl: string) => {
 };
 
 export const createRoomService = async (roomData: Omit<Room, "id">): Promise<Room> => {
+    console.log(roomData);
+    
     const response = await axios.post(API_URL, roomData);
+    return response.data;
+  };
+
+  export const joinRoomService = async (roomId: string, signature: any): Promise<Room> => {
+    const response = await axios.post(`${API_URL}/${roomId}/join`, { signature });
     return response.data;
   };
 

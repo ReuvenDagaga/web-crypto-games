@@ -2,6 +2,7 @@ import { Box, Button, Typography, List, ListItem, ListItemText } from '@mui/mate
 import { Room } from '../../interfaces/Room';
 import { useNavigate } from 'react-router-dom';
 import { processPayment } from "../../services/walletService";
+import { joinRoomService } from '../../services/roomService';
 
 interface RoomsProps {
     rooms: Room[]
@@ -18,7 +19,10 @@ const Rooms = ({ rooms, gameId }: RoomsProps) => {
                 alert("Transaction failed. Please try again.");
                 return;
             }
-                        
+            const joinedRoom = await joinRoomService(roomId, signature); 
+            if (joinedRoom) {
+                navigate(`/game/${gameId}/${roomId}`);
+            }          
         } catch {
             alert("An error occurred while joining the room.");
         }

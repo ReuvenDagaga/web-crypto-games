@@ -31,10 +31,13 @@ const GamePage = () => {
         gameType: gameId,
         price: parseInt(entryFee),
         maxPlayers: 2,
-        players:  [signature.publicKeyAsString],
+        players:  [signature],
         isFull: false,
+        isActive: true
       });
-  
+      if (!newRoom) {
+        throw new Error("Failed to create room");
+      }
       setRooms((prevRooms) => [...prevRooms, newRoom]);
       setOpenModal(false);
     } catch (error) {

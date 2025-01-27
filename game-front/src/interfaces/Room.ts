@@ -8,4 +8,5 @@ export interface Room {
     players: Signature[];
     maxPlayers: number;
     isFull: boolean;
+    isActive: boolean;
 }
